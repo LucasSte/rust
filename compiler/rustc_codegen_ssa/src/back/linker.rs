@@ -347,6 +347,7 @@ impl<'a> GccLinker<'a> {
                 // {
                     self.linker_arg("--section-start=.text=0x100000000");
                     self.linker_arg("--pack-dyn-relocs=relr");
+                    self.linker_arg("--apply-dynamic-relocs");
                     self.linker_arg("--no-pie");
                 //}
             }
