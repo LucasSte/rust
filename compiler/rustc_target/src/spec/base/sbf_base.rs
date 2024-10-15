@@ -57,10 +57,11 @@ SECTIONS
         panic_strategy: PanicStrategy::Abort,
         position_independent_executables: true,
         pre_link_args,
-        requires_lto: false,
         singlethread: true,
         vendor: "solana".into(),
         c_enum_min_bits: Some(32),
+        // forces_embed_bitcode: true,
+        obj_is_bitcode: true,
         .. Default::default()
     }
 }
