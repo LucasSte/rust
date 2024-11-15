@@ -111,7 +111,7 @@ pub fn link_binary(
                 output.file_for_writing(outputs, OutputType::Exe, Some(crate_name.as_str()));
             match crate_type {
                 CrateType::Rlib => {
-                    let _timer = sess.timer("link_rlib");
+                    std::println!("Rlib");
                     info!("preparing rlib to {:?}", out_filename);
                     link_rlib(
                         sess,
@@ -123,6 +123,7 @@ pub fn link_binary(
                     .build(&out_filename);
                 }
                 CrateType::Staticlib => {
+                    std::println!("Staticlib");
                     link_staticlib(
                         sess,
                         archive_builder_builder,
@@ -132,6 +133,7 @@ pub fn link_binary(
                     )?;
                 }
                 _ => {
+                    std::println!("Natively");
                     link_natively(
                         sess,
                         archive_builder_builder,
@@ -2165,6 +2167,7 @@ fn linker_with_args(
         crate_type,
         &codegen_results.crate_info.exported_symbols[&crate_type],
     );
+    std::println!("exported: {:?}", codegen_results.crate_info.exported_symbols[&crate_type]);
 
     // Can be used for adding custom CRT objects or overriding order-dependent options above.
     // FIXME: In practice built-in target specs use this for arbitrary order-independent options,
