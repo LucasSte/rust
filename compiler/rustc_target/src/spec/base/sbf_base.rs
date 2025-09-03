@@ -1,3 +1,4 @@
+#![allow(unused)]
 use crate::abi::Endian;
 use crate::spec::{Cc, cvs, LinkerFlavor, Lld, PanicStrategy, Target, TargetOptions, SymbolVisibility};
 
@@ -80,31 +81,36 @@ pub(crate) fn opts(version: &'static str) -> TargetOptions {
         "--threads=1", "-z", "notext", "--Bdynamic"
     ];
 
-    let linker_script = if version == "v3" || version == "v4" {
-        V3_LINKER_SCRIPT
-    } else {
-        linker_args.push("-z");
-        linker_args.push("max-page-size=4096");
-        V0_LINKER_SCRIPT
-    };
+    // let linker_script = if version == "v3" || version == "v4" {
+    //     V3_LINKER_SCRIPT
+    // } else {
+    //     linker_args.push("-z");
+    //     linker_args.push("max-page-size=4096");
+    //     V0_LINKER_SCRIPT
+    // };
+
+    linker_args.push("-z");
+    linker_args.push("max-page-size=4096");
+    let linker_script = V0_LINKER_SCRIPT;
 
     let pre_link_args = TargetOptions::link_args(
         LinkerFlavor::Gnu(Cc::No, Lld::No),
         linker_args.as_slice(),
     );
 
-    let cpu = if version == "v0" {
-        "generic"
-    } else {
-        version
-    };
+    // let cpu = if version == "v0" {
+    //     "generic"
+    // } else {
+    //     version
+    // };
 
-    let features = match version {
-        "v4" => "+static-syscalls,+abi-v2",
-        "v3" => "+static-syscalls",
-        "v0" => "+store-imm,+jmp-ext",
-        _ => ""
-    };
+    let cpu = "generic";
+    // let features = match version {
+    //     "v4" => "+static-syscalls,+abi-v2",
+    //     "v3" => "+static-syscalls",
+    //     "v0" => "+store-imm,+jmp-ext",
+    //     _ => ""
+    // };
 
     TargetOptions {
         allow_asm: true,
@@ -134,7 +140,7 @@ pub(crate) fn opts(version: &'static str) -> TargetOptions {
         vendor: "solana".into(),
         c_enum_min_bits: Some(32),
         cpu: cpu.into(),
-        features: features.into(),
+        // features: features.into(),
         .. Default::default()
     }
 }
