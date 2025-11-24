@@ -102,7 +102,6 @@ pub(crate) fn opts(version: &'static str) -> TargetOptions {
     let features = match version {
         "v4" => "+static-syscalls,+abi-v2",
         "v3" => "+static-syscalls",
-        "v0" => "+store-imm,+jmp-ext",
         _ => ""
     };
 
