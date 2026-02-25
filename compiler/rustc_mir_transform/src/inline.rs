@@ -1,3 +1,4 @@
+#![allow(unused)]
 //! Inlining pass for MIR functions.
 
 use std::assert_matches::debug_assert_matches;
@@ -15,7 +16,7 @@ use rustc_middle::middle::codegen_fn_attrs::CodegenFnAttrs;
 use rustc_middle::mir::visit::*;
 use rustc_middle::mir::*;
 use rustc_middle::ty::{self, Instance, InstanceKind, Ty, TyCtxt, TypeFlags, TypeVisitableExt};
-use rustc_session::config::{DebugInfo, OptLevel};
+use rustc_session::config::{DebugInfo};
 use rustc_span::source_map::Spanned;
 use tracing::{debug, instrument, trace, trace_span};
 
@@ -43,19 +44,20 @@ struct CallSite<'tcx> {
 pub struct Inline;
 
 impl<'tcx> crate::MirPass<'tcx> for Inline {
-    fn is_enabled(&self, sess: &rustc_session::Session) -> bool {
-        if let Some(enabled) = sess.opts.unstable_opts.inline_mir {
-            return enabled;
-        }
-
-        match sess.mir_opt_level() {
-            0 | 1 => false,
-            2 => {
-                (sess.opts.optimize == OptLevel::More || sess.opts.optimize == OptLevel::Aggressive)
-                    && sess.opts.incremental == None
-            }
-            _ => true,
-        }
+    fn is_enabled(&self, _sess: &rustc_session::Session) -> bool {
+        // if let Some(enabled) = sess.opts.unstable_opts.inline_mir {
+        //     return enabled;
+        // }
+        //
+        // match sess.mir_opt_level() {
+        //     0 | 1 => false,
+        //     2 => {
+        //         (sess.opts.optimize == OptLevel::More || sess.opts.optimize == OptLevel::Aggressive)
+        //             && sess.opts.incremental == None
+        //     }
+        //     _ => true,
+        // }
+        false
     }
 
     fn run_pass(&self, tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
@@ -377,14 +379,17 @@ impl<'tcx> Inliner<'tcx> for NormalInliner<'tcx> {
             return Err("Not inlining multi-block body as we're past a depth limit");
         }
 
-        let mut threshold = if self.caller_is_inline_forwarder || self.past_depth_limit() {
-            tcx.sess.opts.unstable_opts.inline_mir_forwarder_threshold.unwrap_or(30)
-        } else if tcx.cross_crate_inlinable(callsite.callee.def_id()) {
-            tcx.sess.opts.unstable_opts.inline_mir_hint_threshold.unwrap_or(100)
-        } else {
-            tcx.sess.opts.unstable_opts.inline_mir_threshold.unwrap_or(50)
-        };
+        // let mut threshold = if self.caller_is_inline_forwarder || self.past_depth_limit() {
+        //     tcx.sess.opts.unstable_opts.inline_mir_forwarder_threshold.unwrap_or(30)
+        // } else if tcx.cross_crate_inlinable(callsite.callee.def_id()) {
+        //     tcx.sess.opts.unstable_opts.inline_mir_hint_threshold.unwrap_or(100)
+        // } else {
+        //     tcx.sess.opts.unstable_opts.inline_mir_threshold.unwrap_or(50)
+        // };
 
+        let mut threshold = 100;
+
+        //std::println!("Threshold: {}", threshold);
         // Give a bonus functions with a small number of blocks,
         // We normally have two or three blocks for even
         // very small functions.

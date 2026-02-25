@@ -121,6 +121,7 @@ pub(crate) fn opts(version: &'static str) -> TargetOptions {
         c_enum_min_bits: Some(32),
         cpu: cpu.into(),
         features: features.into(),
+        abi_return_struct_as_int: true,
         .. Default::default()
     }
 }

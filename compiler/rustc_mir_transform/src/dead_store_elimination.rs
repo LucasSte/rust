@@ -140,8 +140,9 @@ impl<'tcx> crate::MirPass<'tcx> for DeadStoreElimination {
         }
     }
 
-    fn is_enabled(&self, sess: &rustc_session::Session) -> bool {
-        sess.mir_opt_level() >= 2
+    fn is_enabled(&self, _sess: &rustc_session::Session) -> bool {
+        // sess.mir_opt_level() >= 2
+        false
     }
 
     fn run_pass(&self, tcx: TyCtxt<'tcx>, body: &mut Body<'tcx>) {
