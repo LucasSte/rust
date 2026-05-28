@@ -612,6 +612,7 @@ impl Config {
             polly: llvm_polly,
             clang: llvm_clang,
             enable_warnings: llvm_enable_warnings,
+            enable_projects: llvm_enable_projects,
             download_ci_llvm: llvm_download_ci_llvm,
             build_config: llvm_build_config,
         } = toml.llvm.unwrap_or_default();
@@ -1377,6 +1378,7 @@ impl Config {
             llvm_clang_dir: llvm_clang_dir.map(PathBuf::from),
             llvm_cxxflags,
             llvm_enable_warnings: llvm_enable_warnings.unwrap_or(false),
+            llvm_enable_projects: llvm_enable_projects,
             llvm_enzyme: llvm_enzyme.unwrap_or(false),
             llvm_experimental_targets,
             llvm_from_ci,
